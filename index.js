@@ -114,10 +114,10 @@ For example, variableInterestRate(200000, 0.04, 30) should console.log:
 
 
 
-"{Name}, with an interest rate of 0.02, your monthly rate is $739"
-"{Name}, with an interest rate of 0.025, your monthly rate is $790"
-"{Name}, with an interest rate of 0.03, your monthly rate is $843"
-"{Name}, with an interest rate of 0.035, your monthly rate is $898"
+"{Name}, with an interest rate of 0.02, your monthly rate is $739" //? 0.02+ 0.00
+"{Name}, with an interest rate of 0.025, your monthly rate is $790" //? 0.02 + 0.005 = 0.025
+"{Name}, with an interest rate of 0.03, your monthly rate is $843" //? 0.025 + 0.005 = 0.03
+"{Name}, with an interest rate of 0.035, your monthly rate is $898" //? + 0.005
 "{Name}, with an interest rate of 0.04, your monthly rate is $955"
 "{Name}, with an interest rate of 0.045, your monthly rate is $1013"
 "{Name}, with an interest rate of 0.05, your monthly rate is $1074"
@@ -125,17 +125,30 @@ For example, variableInterestRate(200000, 0.04, 30) should console.log:
 "{Name}, with an interest rate of 0.06, your monthly rate is $1199"
 */
 
-function variableInterestRate(principal, interest_rate, years, name) {
-  var periods = years * 12;
-  var monthlyInterestRate = interest_rate / 12;
-  let numerator =
-    Math.pow(1 + monthlyInterestRate, periods) * monthlyInterestRate;
-  let denominator = Math.pow(1 + monthlyInterestRate, periods) - 1;
-  var payment = principal * (numerator / denominator);
+console.log(0.025 - 0.02);
 
-  var newRate = interest_rate - 0.02 + 0.005;
-  for (i = 0; i < 10; i++) {
-    newRate[i];
+function variableInterestRate(
+  principal = default_principal,
+  interest_rate = 0.04,
+  years = default_years,
+  name = default_name
+) {
+  interest_rate -= 0.02;
+  for (let index = 0; index < 9; index++) {
+    let added_rate = 0.005 * index;
+    console.log(added_rate);
+    current_rate = Math.round((interest_rate + added_rate) * 1000) / 1000;
+    var periods = years * 12;
+    var monthlyInterestRate = current_rate / 12;
+    let numerator =
+      Math.pow(1 + monthlyInterestRate, periods) * monthlyInterestRate;
+    let denominator = Math.pow(1 + monthlyInterestRate, periods) - 1;
+    var payment = principal * (numerator / denominator);
+    console.log(
+      `${name} with an interest rate of ${current_rate}, your monthly rate is ${Math.round(
+        payment
+      )}`
+    );
   }
 }
 
@@ -144,6 +157,26 @@ function variableInterestRate(principal, interest_rate, years, name) {
 /* Attempt any of the stretch goals below once you have finished the work above. Remember as always, these may require additional research beyond what you learned today */
 
 /*  🏡 Add  `Property Tax`, `Homeowner's insurance` and `HOA fees` as parameters in your function to calculate total monthly spending on housing */
+
+function totalMonthlyFees(
+  property_tax = 5,
+  home_insurance = 5,
+  hoa_fees = 5,
+  principal = default_principal,
+  interest_rate = default_interest_rate,
+  years = default_years,
+  name = default_name
+) {
+  var periods = years * 12;
+  var monthlyInterestRate = interest_rate / 12;
+  let numerator =
+    Math.pow(1 + monthlyInterestRate, periods) * monthlyInterestRate;
+  let denominator = Math.pow(1 + monthlyInterestRate, periods) - 1;
+  var payment = principal * (numerator / denominator);
+  var sum = payment + property_tax + home_insurance + hoa_fees;
+  return `${name}, your monthly payment is ${Math.round(sum * 100) / 100}`;
+}
+console.log(totalMonthlyFees());
 
 /* 🏡 Build a calculator function that accepts `monthly payment` and `interest rate` and returns the maximum loan that a person could afford */
 
